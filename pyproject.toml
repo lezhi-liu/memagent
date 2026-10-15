@@ -1,0 +1,62 @@
+[project]
+name = "memagent"
+version = "0.1.0"
+description = "A multi-user, general-purpose AI agent with long-term memory."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "alembic>=1.20.0",
+    "asyncpg>=0.32.0",
+    "fastapi>=0.143.0",
+    "httpx>=0.28.1",
+    "openai>=3.28.0",
+    "pydantic>=2.14.0",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy[asyncio]>=2.1.4",
+    "typer>=0.27.3",
+    "uvicorn>=0.54.0",
+]
+
+[project.scripts]
+memagent = "memagent.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["memagent"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "ASYNC", "S", "RUF"]
+ignore = ["S101"]  # assert is fine in tests
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S108"]  # fake secrets and tmp paths are the point of the tests
+"tests/test_sanitize.py" = ["S105", "S106", "RUF001"]  # Chinese full-width punctuation is under test
+"migrations/**" = ["E501"]
+
+[tool.pyright]
+include = ["memagent", "tests", "migrations"]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.414",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.17.0",
+]

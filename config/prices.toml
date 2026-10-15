@@ -1,0 +1,30 @@
+# Price table used to compute llm_calls.cost_usd.
+#
+# One [models."<name>"] entry per model you put in AGENT_MODEL / SEARCH_MODEL; the key must
+# match the env var exactly. Prices are USD per 1,000,000 tokens. The API server refuses to
+# start if either configured model has no entry here, so spend is never untracked.
+#
+# Check https://developers.openai.com/api/docs/pricing before adding or changing an entry.
+# Entries below: Standard tier, short context (<=272K input), checked 2026-10-11.
+#
+# Example shape (values are placeholders, not real prices):
+# [models."example-model"]
+# input_per_mtok = 1.00
+# cached_input_per_mtok = 0.10
+# output_per_mtok = 4.00
+
+[models."gpt-5.4-mini"]
+input_per_mtok = 0.75
+cached_input_per_mtok = 0.075
+output_per_mtok = 4.50
+
+[models."gpt-5-mini"]
+input_per_mtok = 0.25
+cached_input_per_mtok = 0.025
+output_per_mtok = 2.00
+
+[search]
+# Fee per hosted web_search tool call ($10 / 1k calls, all models; checked 2026-10-11),
+# on top of the search model's token usage. Search content tokens are billed at model
+# rates and already appear in the response's input_tokens.
+per_call_usd = 0.01

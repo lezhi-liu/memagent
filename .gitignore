@@ -1,0 +1,20 @@
+# secrets
+.env
+
+# runtime data (per-user workspaces)
+data/
+
+# python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.pyright/
+*.egg-info/
+dist/
+
+# private planning docs (kept local, not committed)
+docs/Design.md
+docs/Design-zh.md
+docs/roadmap.md

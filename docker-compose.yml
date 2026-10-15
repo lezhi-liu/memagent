@@ -1,0 +1,21 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: memagent
+      POSTGRES_PASSWORD: memagent  # local dev only; never used outside this container
+      POSTGRES_DB: memagent
+    ports:
+      - "5433:5432"   # host 5433: 5432 is often taken by a native Postgres install
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Runs once, on first start with an empty volume: creates the test database.
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U memagent"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+volumes:
+  pgdata:
